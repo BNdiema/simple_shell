@@ -12,14 +12,12 @@ int main(void)
 	size_t buff = 10;
 	ssize_t input_size;
 	pid_t pid;
-	char *command_path;
 
 	while (1)
 	{
-		write(STDOUT_FILENO, prompt, sizeof(prompt) - 1);
-		input_size = getline(&cmd, &buff, stdin);
-		if (input_size == -1)
-			break;
+		write(STDOUT_FILENO, prompt, sizeof(prompt) - 1), input_size
+			= getline(&cmd, &buff, stdin);
+
 		if (input_size > 0 && cmd[input_size - 1] == '\n')
 		{
 			cmd[input_size - 1] = '\0';
@@ -27,8 +25,6 @@ int main(void)
 		}
 		if (strcmp(cmd, "exit") == 0 || strcmp(cmd, "quit") == 0)
 			break;
-
-		command_path = get_path(cmd);
 
 		pid = fork();
 
