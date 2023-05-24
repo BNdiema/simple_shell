@@ -18,11 +18,12 @@ int main(void)
 	size_t buff = 10;
 	ssize_t input_size;
 	pid_t pid;
-
+	char *argv[2];
+	extern char **environ;
 	while (1)
 	{
-		write(STDOUT_FILENO, prompt, sizeof(prompt) - 1), input_size
-			= getline(&cmd, &buff, stdin);
+		write(STDOUT_FILENO, prompt, sizeof(prompt) - 1),
+			input_size = getline(&cmd, &buff, stdin);
 
 		if (input_size > 0 && cmd[input_size - 1] == '\n')
 		{
@@ -34,8 +35,15 @@ int main(void)
 
 		pid = fork();
 
-
-		if (pid == -1)
+		if (pid == 0)
+		{
+			argv[0] = "/bin/ls";
+			argv[1] = NULL;
+			execve(argv[0], argv, environ);
+			perror("Commnad execution faild");
+			exit(1);
+		}
+		else if (pid == -1)
 		{
 			perror("Forking faild");
 			exit(1);
@@ -44,6 +52,5 @@ int main(void)
 			wait(NULL);
 	}
 	free(cmd);
-
 	return (0);
 }
