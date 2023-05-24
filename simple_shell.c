@@ -5,6 +5,12 @@
 #include <sys/wait.h>
 #include "main.h"
 
+/**
+ * main - main entry point
+ *
+ * Return: always 0
+ */
+
 int main(void)
 {
 	char *cmd = NULL;
@@ -28,11 +34,7 @@ int main(void)
 
 		pid = fork();
 
-		if (pid == 0)
-		{
-			handle_arguments(cmd);
-			exit(0);
-		}
+
 		if (pid == -1)
 		{
 			perror("Forking faild");

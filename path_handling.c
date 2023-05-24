@@ -4,6 +4,13 @@
 #include <unistd.h>
 #include "main.h"
 
+/**
+ * create_full_path - creates the path requred
+ * @dir: Path to a directory
+ * @cmd: commands passed
+ * Return: the path request
+ */
+
 char *create_full_path(const char *dir, const char *cmd)
 {
 	int dir_length = strlen(dir);
@@ -23,6 +30,12 @@ char *create_full_path(const char *dir, const char *cmd)
 
 	return (full_path);
 }
+
+/**
+ * get_path - displays the path in regards to commands passed
+ * @cmd: commands passed
+ * Return: NULL
+ */
 
 char *get_path(const char *cmd)
 {
