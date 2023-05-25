@@ -1,0 +1,51 @@
+#include "main.h"
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+char *get_environment_variable(const char *name, char **env)
+{
+	size_t len = strlen(name);
+
+	while (*env)
+	{
+		if (strncmp(*env, name, len) == 0 && (*env)[len] == '=')
+		{
+			return (*env + len + 1);
+		}
+
+		env++;
+	}
+
+	return (NULL);
+}
+
+int set_enviroment_variable(const char *name, const char *value)
+{
+	char *variable;
+	size_t name_len = strlen(name);
+	size_t value_len = strlen(value);
+	size_t total_len = name_len + value_len + 2;
+	char *argv[3];
+
+	variable = malloc(total_len);
+
+	if (variable == NULL)
+	{
+		return (-1);
+	}
+
+	memcpy(variable, name, name_len);
+	variable[name_len] = '=';
+	memcpy(variable + name_len + 1, value, value_len);
+	variable[total_len - 1] = '\0';
+
+	argv[0] = "env";
+	argv[1] = variable;
+	argv[2] = NULL;
+
+	execve("/usr/bin/env", argv, NULL);
+
+	return (-1);
+}

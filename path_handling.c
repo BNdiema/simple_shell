@@ -3,57 +3,59 @@
 #include <string.h>
 #include <unistd.h>
 #include "main.h"
+#include <sys/wait.h>
 
 /**
- * create_full_path - creates the path requred
- * @dir: Path to a directory
+ * handlePath - creates the path requred
  * @cmd: commands passed
  * Return: the path request
  */
 
-char *create_full_path(const char *dir, const char *cmd)
-{
-	int dir_length = strlen(dir);
-	int cmd_length = strlen(cmd);
-
-	char *full_path = malloc(dir_length + cmd_length + 2);
-
-	if (full_path == NULL)
-	{
-		perror("Memory allocation failed");
-		exit(1);
-	}
-	memcpy(full_path, dir, dir_length);
-	full_path[dir_length] = '/';
-	memcpy(full_path + dir_length + 1, cmd, cmd_length);
-	full_path[dir_length + cmd_length + 1] = '\0';
-
-	return (full_path);
-}
-
-/**
- * get_path - displays the path in regards to commands passed
- * @cmd: commands passed
- * Return: NULL
- */
-
-char *get_path(const char *cmd)
+void handlePath(char *cmd)
 {
 	char *path = getenv("PATH");
-	char *path_copy = strdup(path);
-	char *token = strtok(path_copy, ":");
-	char *full_path = NULL;
+	char *token;
+	char cmmd[100];
+	int exists = 0;
+	size_t path_len;
+	size_t cmd_len;
+	char *args[3];
+
+	token = strtok(path, ":");
 
 	while (token != NULL)
 	{
-		full_path = create_full_path(token, cmd);
-		if (access(full_path, X_OK) == 0)
+		path_len = strlen(token);
+		cmd_len = strlen(cmmd);
+
+		if (path_len + 1 + cmd_len < sizeof(cmmd))
 		{
-			return (full_path);
+			memcpy(cmmd, token, path_len);
+			cmd[path_len] = '/';
+			memcpy(cmmd + path_len + 1, cmd, cmd_len);
+			cmd[path_len + 1 + cmd_len] = '\0';
+
+			if (access(cmmd, X_OK) == 0)
+			{
+				exists = 1;
+				break;
+			}
 		}
-		free(full_path);
+
 		token = strtok(NULL, ":");
 	}
-	free(path_copy);
-	return (NULL);
+
+	if (!exists)
+	{
+		write(STDOUT_FILENO, "Command not found\n", 18);
+		return;
+	}
+
+	args[0] = cmmd;
+	args[1] = cmd;
+	args[2] = NULL;
+
+	execve(cmmd, args, NULL);
+	write(STDOUT_FILENO, "Command execution failed\n", 24);
+	exit(1);
 }
