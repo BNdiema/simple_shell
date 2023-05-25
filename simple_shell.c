@@ -37,7 +37,8 @@ int main(void)
 			break;
 
 		executeCommand(cmd);
-
+		handlePath(cmd);
+		
 		if (isInteractive)
 			write(STDOUT_FILENO, prompt, sizeof(prompt) - 1);
 	}
