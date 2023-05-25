@@ -22,7 +22,6 @@ void handlePath(char *cmd)
 	char *args[3];
 
 	token = strtok(path, ":");
-
 	while (token != NULL)
 	{
 		path_len = strlen(token);
@@ -41,20 +40,16 @@ void handlePath(char *cmd)
 				break;
 			}
 		}
-
 		token = strtok(NULL, ":");
 	}
-
 	if (!exists)
 	{
 		write(STDOUT_FILENO, "Command not found\n", 18);
 		return;
 	}
-
 	args[0] = cmmd;
 	args[1] = cmd;
 	args[2] = NULL;
-
 	execve(cmmd, args, NULL);
 	write(STDOUT_FILENO, "Command execution failed\n", 24);
 	exit(1);
