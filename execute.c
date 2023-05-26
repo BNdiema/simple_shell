@@ -20,7 +20,17 @@ void executeCommand(char *cmd)
 	char *args[3];
 	char *envp[] = {NULL};
 	int status;
+	char *args[BUFFER_SIZE];
+	char *tocken;
 
+	tocken = strtok(cmd, " ");
+
+	while (tocken != NULL)
+	{
+		args[i++] = tocken;
+		tocken = strtok(NULL, " ");
+	}
+	args[i] = NULL;
 
 	pid = fork();
 
