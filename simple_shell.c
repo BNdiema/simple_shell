@@ -4,8 +4,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include "main.h"
-#include <stddef.h>
-
+#include <fcntl.h>
 /**
  * main - main entry point
  *
@@ -16,33 +15,35 @@ int main(void)
 {
 	char *cmd = NULL;
 	const char prompt[] = "$ ";
-	size_t buff = 10;
-	ssize_t input_size;
 	int isInteractive;
+	ssize_t bytesRead;
+	int fd;
 
 	isInteractive = isatty(fileno(stdin));
 
 	if (isInteractive)
 		write(STDOUT_FILENO, prompt, sizeof(prompt) - 1);
 
-	while ((input_size = getline(&cmd, &buff, stdin)) != -1)
+	while ((bytesRead = read(STDIN_FILENO, cmd, sizeof(cmd))) > 0)
 	{
-
-		if (input_size > 0 && cmd[input_size - 1] == '\n')
-		{
-			cmd[input_size - 1] = '\0';
-			input_size--;
-		}
 		if (strcmp(cmd, "exit") == 0 || strcmp(cmd, "quit") == 0)
 			break;
 
 		executeCommand(cmd);
-		handlePath(cmd);
-		
+
 		if (isInteractive)
 			write(STDOUT_FILENO, prompt, sizeof(prompt) - 1);
 	}
 
-	free(cmd);
+	write(STDOUT_FILENO, "\n", 1);
+
+	fd = open("test_ls_2", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd != -1)
+	{
+		write(fd, "/bin/ls\n", strlen("/bin/ls\n"));
+		write(fd, "/bin/ls\n", strlen("/bin/ls\n"));
+		close(fd);
+	}
+
 	return (0);
 }

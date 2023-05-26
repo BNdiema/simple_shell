@@ -6,6 +6,8 @@
 #include <wait.h>
 #include <stddef.h>
 
+#define BUFFER_SIZE 1024
+
 /**
  * executeCommand - executes a command
  * @cmd: command passed
@@ -15,36 +17,31 @@
 void executeCommand(char *cmd)
 {
 	pid_t pid;
-	char *args[70];
-	char *token;
-	int i;
+	char *args[3];
+	int status;
+	char *envp[] = {NULL};
 
 
 	pid = fork();
-	i = 0;
 
-	if (pid == 0)
+	if (pid == -1)
 	{
-
-		token = strtok(cmd, " ");
-		while (token != NULL)
-		{
-			args[i++] = token;
-			token = strtok(NULL, " ");
-		}
-		args[i] = NULL;
-
-		execve(args[0], args, NULL);
-		perror("Command execution failed");
-		exit(1);
+		perror("fork");
+		return;
 	}
-	else if (pid == -1)
+	else if (pid == 0)
 	{
-		perror("Forking failed");
+		args[0] = "/bin/sh";
+		args[1] = "-c";
+		args[2] = cmd;
+		args[3] = NULL;
+
+		execve(args[0], args, envp);
+		perror("execve");
 		exit(1);
 	}
 	else
 	{
-		wait(NULL);
+		waitpid(pid, &status, 0);
 	}
 }
