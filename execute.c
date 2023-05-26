@@ -17,12 +17,12 @@
 void executeCommand(char *cmd)
 {
 	pid_t pid;
-	char *args[3];
 	char *envp[] = {NULL};
 	int status;
 	char *args[BUFFER_SIZE];
 	char *tocken;
-
+	int i;
+	
 	tocken = strtok(cmd, " ");
 
 	while (tocken != NULL)
