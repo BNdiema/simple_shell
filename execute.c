@@ -20,10 +20,9 @@ void executeCommand(char *cmd)
 	char *envp[] = {NULL};
 	int status;
 	char *args[BUFFER_SIZE];
-	char *tocken;
+	char *tocken = strtok(cmd, " ");
 	int i;
-
-	tocken = strtok(cmd, " ");
+	int j;
 
 	while (tocken != NULL)
 	{
@@ -54,4 +53,6 @@ void executeCommand(char *cmd)
 	{
 		waitpid(pid, &status, 0);
 	}
+	for (j = 0; j < i; j++)
+		free(args[j]);
 }
