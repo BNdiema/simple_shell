@@ -18,8 +18,8 @@ void executeCommand(char *cmd)
 {
 	pid_t pid;
 	char *args[3];
-	int status;
 	char *envp[] = {NULL};
+	int status;
 
 
 	pid = fork();
