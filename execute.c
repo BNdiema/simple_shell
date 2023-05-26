@@ -22,7 +22,7 @@ void executeCommand(char *cmd)
 	char *args[BUFFER_SIZE];
 	char *tocken;
 	int i;
-	
+
 	tocken = strtok(cmd, " ");
 
 	while (tocken != NULL)
