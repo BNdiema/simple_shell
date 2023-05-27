@@ -12,6 +12,6 @@
 void executeCommand(char *cmd);
 void handle_arguments(char *cmd);
 void handlePath(char *cmd);
-
+void exitShell(void);
 
 #endif

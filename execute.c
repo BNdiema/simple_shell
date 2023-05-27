@@ -16,10 +16,16 @@
 
 void executeCommand(char *cmd)
 {
+
 	pid_t pid;
 	char *envp[] = {NULL};
 	int status;
 	char *args[4];
+
+	if (strcmp(cmd, "exit") == 0)
+	{
+		exitShell();
+	}
 
 	pid = fork();
 
@@ -43,4 +49,4 @@ void executeCommand(char *cmd)
 	{
 		waitpid(pid, &status, 0);
 	}
- }
+}
