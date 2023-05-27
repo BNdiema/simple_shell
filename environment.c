@@ -5,6 +5,7 @@
 
 /**
  * myEnviron - print current ennvironment
+ * @envp: pointer to variable
  * Return: 0
  */
 
