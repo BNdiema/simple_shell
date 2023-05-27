@@ -9,6 +9,7 @@
 
 #define BUFFER_SIZE 1024
 
+
 /**
  * main - main entry point
  *
@@ -30,10 +31,10 @@ int main(void)
 	{
 		bytesRead = read(STDIN_FILENO, cmd, sizeof(cmd));
 		if (bytesRead <= 0)
-			return 0;
+			return (0);
 		cmd[bytesRead - 1] = '\0';
 		executeCommand(cmd);
-		return 0;
+		return (0);
 	}
 
 	while ((bytesRead = read(STDIN_FILENO, cmd, sizeof(cmd))) > 0)

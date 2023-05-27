@@ -19,17 +19,7 @@ void executeCommand(char *cmd)
 	pid_t pid;
 	char *envp[] = {NULL};
 	int status;
-	char *args[BUFFER_SIZE];
-	char *tocken = strtok(cmd, " ");
-	int i;
-	int j;
-
-	while (tocken != NULL)
-	{
-		args[i++] = tocken;
-		tocken = strtok(NULL, " ");
-	}
-	args[i] = NULL;
+	char *args[4];
 
 	pid = fork();
 
@@ -53,6 +43,4 @@ void executeCommand(char *cmd)
 	{
 		waitpid(pid, &status, 0);
 	}
-	for (j = 0; j < i; j++)
-		free(args[j]);
-}
+ }
