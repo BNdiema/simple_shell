@@ -27,6 +27,8 @@ void executeCommand(char *cmd)
 		exitShell();
 	}
 
+	myEnviron(envp);
+
 	pid = fork();
 
 	if (pid == -1)
